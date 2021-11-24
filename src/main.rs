@@ -1,6 +1,11 @@
 use std::io;
 use rand::Rng;
+use std::any::type_name;
 use std::cmp::Ordering;
+
+fn type_of<T>(_: T) -> &'static str {
+    type_name::<T>()
+}
 
 fn main() {
     println!("Guess the number!");
@@ -19,10 +24,16 @@ fn main() {
         let guess: u32 = match guess.trim().parse() {
             Ok(num) => num,
             Err(_) => {
+                if guess.trim().to_lowercase() == "quit" {
+                    break;
+                } else {
                 println!("Please Input a valid number");
+                println!("You guess: {}", type_of(&guess));
                 continue;
+                }
             }
         };
+
         println!("You guessed: {}", guess);
         try_count += 1;
 
